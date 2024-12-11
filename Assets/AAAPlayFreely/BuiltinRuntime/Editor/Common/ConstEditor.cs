@@ -6,5 +6,7 @@ namespace PlayFreelyGameFramework.EditorTools
     public class ConstEditor
     {
 
+
+        public static readonly string ScenePath = "Assets/AAAPlayFreely/Scene";
     }
 }
