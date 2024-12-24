@@ -6,7 +6,9 @@ namespace PlayFreelyGameFramework.EditorTools
     public class ConstEditor
     {
 
-
+        /// <summary>
+        /// 场景文件路径
+        /// </summary>
         public static readonly string ScenePath = "Assets/AAAPlayFreely/Scene";
     }
 }

@@ -14,17 +14,19 @@ namespace PlayFreelyGameFramework.EditorTools
     /// </summary>
     public class EditorToolbarExtension
     {
-
-        private static GUIContent switchSceneBtContent;
+        /// <summary>
+        /// 绘制切换场景按钮
+        /// </summary>
+        private static GUIContent g_SwitchSceneBtContent;
 
         /// <summary>
         /// Toolbar栏工具箱下拉列表
         /// </summary>
-        private static List<Type> editorToolList;
+        private static List<Type> m_EditorToolList;
         /// <summary>
         /// 场景下拉列表
         /// </summary>
-        private static List<string> sceneAssetList;
+        private static List<string> m_SceneAssetList;
 
 
         /// <summary>
@@ -33,11 +35,11 @@ namespace PlayFreelyGameFramework.EditorTools
         [InitializeOnLoadMethod]
         private static void Initialize( )
         {
-            editorToolList = new List<Type>( );
-            sceneAssetList = new List<string>( );
+            m_EditorToolList = new List<Type>( );
+            m_SceneAssetList = new List<string>( );
 
             var curOpenSceneName = EditorSceneManager.GetActiveScene( ).name;
-            switchSceneBtContent = EditorGUIUtility.TrTextContentWithIcon( "Switch Scene" , "切换场景" , "UnityLogo");
+            g_SwitchSceneBtContent = EditorGUIUtility.TrTextContentWithIcon( "Switch Scene" , "切换场景" , "UnityLogo");
 
             ScanEditorToolClass( );
 
@@ -50,12 +52,12 @@ namespace PlayFreelyGameFramework.EditorTools
         /// </summary>
         static void ScanEditorToolClass( )
         {
-            editorToolList.Clear( );
+            m_EditorToolList.Clear( );
             var editorDll = Utility.Assembly.GetAssemblies( ).First(dll => dll.GetName( ).Name.CompareTo("PlayFreelyGameFramework.EditorTools") == 0);
             var allEditorTool = editorDll.GetTypes( ).Where(tp => ( tp.IsClass && !tp.IsAbstract && tp.IsSubclassOf(typeof(EditorToolBase)) && tp.GetCustomAttribute(typeof(EditorToolMenuAttribute)) != null ));
 
-            editorToolList.AddRange(allEditorTool);
-            editorToolList.Sort((x , y) =>
+            m_EditorToolList.AddRange(allEditorTool);
+            m_EditorToolList.Sort((x , y) =>
             {
                 int xOrder = x.GetCustomAttribute<EditorToolMenuAttribute>( ).MenuOrder;
                 int yOrder = y.GetCustomAttribute<EditorToolMenuAttribute>( ).MenuOrder;
@@ -77,23 +79,26 @@ namespace PlayFreelyGameFramework.EditorTools
         private static void OnLeftToolbarGUI( )
         {
             GUILayout.FlexibleSpace( );
-            if(EditorGUILayout.DropdownButton(switchSceneBtContent , FocusType.Passive , EditorStyles.toolbarPopup , GUILayout.MaxWidth(150)))
+            if(EditorGUILayout.DropdownButton(g_SwitchSceneBtContent , FocusType.Passive , EditorStyles.toolbarPopup , GUILayout.MaxWidth(150)))
             {
                 DrawSwithSceneDropdownMenus( );
             }
             EditorGUILayout.Space(10);
         }
 
+        /// <summary>
+        /// 绘制切换场景的下拉菜单
+        /// </summary>
         static void DrawSwithSceneDropdownMenus( )
         {
             GenericMenu popMenu = new GenericMenu( );
             popMenu.allowDuplicateNames = true;
             var sceneGuids = AssetDatabase.FindAssets("t:Scene" , new string[] { ConstEditor.ScenePath });
-            sceneAssetList.Clear( );
+            m_SceneAssetList.Clear( );
             for(int i = 0; i < sceneGuids.Length; i++)
             {
                 var scenePath = AssetDatabase.GUIDToAssetPath(sceneGuids[i]);
-                sceneAssetList.Add(scenePath);
+                m_SceneAssetList.Add(scenePath);
                 string fileDir = System.IO.Path.GetDirectoryName(scenePath);
                 bool isInRootDir = Utility.Path.GetRegularPath(ConstEditor.ScenePath).TrimEnd('/') == Utility.Path.GetRegularPath(fileDir).TrimEnd('/');
                 var sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
@@ -108,11 +113,15 @@ namespace PlayFreelyGameFramework.EditorTools
             }
             popMenu.ShowAsContext( );
         }
+        /// <summary>
+        /// 切换场景
+        /// </summary>
+        /// <param name="menuIdx">索引</param>
         private static void SwitchScene(int menuIdx)
         {
-            if(menuIdx >= 0 && menuIdx < sceneAssetList.Count)
+            if(menuIdx >= 0 && menuIdx < m_SceneAssetList.Count)
             {
-                var scenePath = sceneAssetList[menuIdx];
+                var scenePath = m_SceneAssetList[menuIdx];
                 var curScene = EditorSceneManager.GetActiveScene( );
                 if(curScene != null && curScene.isDirty)
                 {
