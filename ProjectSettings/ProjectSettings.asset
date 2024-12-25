@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: WhiteTeaPlayFreely
   productName: PlayFreely
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -163,7 +163,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.DefaultCompany.PlayFreely
+    Android: com.WhiteTeaPlayFreely.PlayFreely
     Standalone: com.DefaultCompany.3D-Project
   buildNumber:
     Standalone: 0
