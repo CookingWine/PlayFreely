@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Experimental.UIElements;
 #endif
 
-namespace PlayFreelyGameFramework.EditorTools
+namespace PlayFreely.EditorTools
 {
     /// <summary>
     /// Unity编辑器工具栏

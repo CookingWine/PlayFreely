@@ -1,6 +1,6 @@
 using System;
 
-namespace PlayFreelyGameFramework.EditorTools
+namespace PlayFreely.EditorTools
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class EditorToolMenuAttribute:Attribute

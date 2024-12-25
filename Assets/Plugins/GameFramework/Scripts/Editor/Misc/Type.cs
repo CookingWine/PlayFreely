@@ -23,7 +23,7 @@ namespace UnityGameFramework.Editor
 #endif
             "Assembly-CSharp",
 
-            "PlayFreelyXiYou.BuiltinRuntime",
+            "PlayFreely.BuiltinRuntime",
         };
 
         private static readonly string[] RuntimeOrEditorAssemblyNames =
@@ -37,7 +37,7 @@ namespace UnityGameFramework.Editor
 #endif
             "Assembly-CSharp-Editor",
 
-            "PlayFreelyXiYou.GameEditor"
+            "PlayFreely.EditorTools"
         };
 
         /// <summary>

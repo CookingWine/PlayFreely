@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace PlayFreelyGameFramework.EditorTools
+namespace PlayFreely.EditorTools
 {
     /// <summary>
     /// 编辑器工具基类

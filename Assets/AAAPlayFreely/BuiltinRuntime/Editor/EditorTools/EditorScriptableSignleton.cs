@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace PlayFreelyGameFramework.EditorTools
+namespace PlayFreely.EditorTools
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class FilePathAttribute:Attribute

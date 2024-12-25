@@ -1,0 +1,23 @@
+{
+    "name": "PlayFreely.EditorTools",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2373f786d14518f44b0f475db77ba4de",
+        "GUID:13ba8ce62aa80c74598530029cb2d649",
+        "GUID:a2d8a19598eca814496b089021d08d60",
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:6733a1c52c97e244e995bbf0c1328f7f",
+        "GUID:7beb8a30a40a10c41bea4a884a99ece3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

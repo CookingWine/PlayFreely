@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace PlayFreelyGameFramework.EditorTools
+namespace PlayFreely.EditorTools
 {
     /// <summary>
     /// Editor工具栏扩展
@@ -39,7 +39,7 @@ namespace PlayFreelyGameFramework.EditorTools
             m_SceneAssetList = new List<string>( );
 
             var curOpenSceneName = EditorSceneManager.GetActiveScene( ).name;
-            g_SwitchSceneBtContent = EditorGUIUtility.TrTextContentWithIcon( "Switch Scene" , "切换场景" , "UnityLogo");
+            g_SwitchSceneBtContent = EditorGUIUtility.TrTextContentWithIcon("Switch Scene" , "切换场景" , "UnityLogo");
 
             ScanEditorToolClass( );
 
@@ -53,7 +53,7 @@ namespace PlayFreelyGameFramework.EditorTools
         static void ScanEditorToolClass( )
         {
             m_EditorToolList.Clear( );
-            var editorDll = Utility.Assembly.GetAssemblies( ).First(dll => dll.GetName( ).Name.CompareTo("PlayFreelyGameFramework.EditorTools") == 0);
+            var editorDll = Utility.Assembly.GetAssemblies( ).First(dll => dll.GetName( ).Name.CompareTo(ConstEditor.PlayFreelyEditorAssembly) == 0);
             var allEditorTool = editorDll.GetTypes( ).Where(tp => ( tp.IsClass && !tp.IsAbstract && tp.IsSubclassOf(typeof(EditorToolBase)) && tp.GetCustomAttribute(typeof(EditorToolMenuAttribute)) != null ));
 
             m_EditorToolList.AddRange(allEditorTool);
@@ -70,7 +70,7 @@ namespace PlayFreelyGameFramework.EditorTools
         /// </summary>
         private static void OnRightToolbarGUI( )
         {
-           
+
         }
 
         /// <summary>
@@ -93,26 +93,34 @@ namespace PlayFreelyGameFramework.EditorTools
         {
             GenericMenu popMenu = new GenericMenu( );
             popMenu.allowDuplicateNames = true;
-            var sceneGuids = AssetDatabase.FindAssets("t:Scene" , new string[] { ConstEditor.ScenePath });
             m_SceneAssetList.Clear( );
+            DrawSceneMenusInfo(popMenu , ConstEditor.EditorScenePath);
+            DrawSceneMenusInfo(popMenu , ConstEditor.BuiltinRuntimeScenePath);
+            DrawSceneMenusInfo(popMenu , ConstEditor.HotfixRuntimeScenePath);
+            popMenu.ShowAsContext( );
+        }
+
+        private static void DrawSceneMenusInfo(GenericMenu popMenu , string path)
+        {
+            var sceneGuids = AssetDatabase.FindAssets("t:Scene" , new string[] { path });
             for(int i = 0; i < sceneGuids.Length; i++)
             {
                 var scenePath = AssetDatabase.GUIDToAssetPath(sceneGuids[i]);
                 m_SceneAssetList.Add(scenePath);
                 string fileDir = System.IO.Path.GetDirectoryName(scenePath);
-                bool isInRootDir = Utility.Path.GetRegularPath(ConstEditor.ScenePath).TrimEnd('/') == Utility.Path.GetRegularPath(fileDir).TrimEnd('/');
+                bool isInRootDir = Utility.Path.GetRegularPath(path).TrimEnd('/') == Utility.Path.GetRegularPath(fileDir).TrimEnd('/');
                 var sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
                 string displayName = sceneName;
                 if(!isInRootDir)
                 {
-                    var sceneDir = System.IO.Path.GetRelativePath(ConstEditor.ScenePath , fileDir);
+                    var sceneDir = System.IO.Path.GetRelativePath(path , fileDir);
                     displayName = $"{sceneDir}/{sceneName}";
                 }
 
-                popMenu.AddItem(new GUIContent(displayName) , false , menuIdx => { SwitchScene((int)menuIdx); } , i);
+                popMenu.AddItem(new GUIContent(displayName) , false , menuIdx => { SwitchScene((int)menuIdx); } , m_SceneAssetList.Count - 1 + i);
             }
-            popMenu.ShowAsContext( );
         }
+
         /// <summary>
         /// 切换场景
         /// </summary>
