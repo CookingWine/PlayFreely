@@ -53,7 +53,7 @@ namespace PlayFreely.EditorTools
         static void ScanEditorToolClass( )
         {
             m_EditorToolList.Clear( );
-            var editorDll = Utility.Assembly.GetAssemblies( ).First(dll => dll.GetName( ).Name.CompareTo(ConstEditor.PlayFreelyEditorAssembly) == 0);
+            var editorDll = Utility.Assembly.GetAssemblies( ).First(dll => dll.GetName( ).Name.CompareTo(PlayFreelyConstEditor.PlayFreelyEditorAssembly) == 0);
             var allEditorTool = editorDll.GetTypes( ).Where(tp => ( tp.IsClass && !tp.IsAbstract && tp.IsSubclassOf(typeof(EditorToolBase)) && tp.GetCustomAttribute(typeof(EditorToolMenuAttribute)) != null ));
 
             m_EditorToolList.AddRange(allEditorTool);
@@ -94,9 +94,9 @@ namespace PlayFreely.EditorTools
             GenericMenu popMenu = new GenericMenu( );
             popMenu.allowDuplicateNames = true;
             m_SceneAssetList.Clear( );
-            DrawSceneMenusInfo(popMenu , ConstEditor.EditorScenePath);
-            DrawSceneMenusInfo(popMenu , ConstEditor.BuiltinRuntimeScenePath);
-            DrawSceneMenusInfo(popMenu , ConstEditor.HotfixRuntimeScenePath);
+            DrawSceneMenusInfo(popMenu , PlayFreelyConstEditor.EditorScenePath);
+            DrawSceneMenusInfo(popMenu , PlayFreelyConstEditor.BuiltinRuntimeScenePath);
+            DrawSceneMenusInfo(popMenu , PlayFreelyConstEditor.HotfixRuntimeScenePath);
             popMenu.ShowAsContext( );
         }
 
