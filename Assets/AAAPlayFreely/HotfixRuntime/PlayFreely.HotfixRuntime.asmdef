@@ -1,0 +1,22 @@
+{
+    "name": "PlayFreely.HotfixRuntime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:13ba8ce62aa80c74598530029cb2d649",
+        "GUID:363c5eb08ff8e6a439b85e37b8c20d96",
+        "GUID:7beb8a30a40a10c41bea4a884a99ece3",
+        "GUID:3ca842002c51d0a43b73e45298809a13",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:6733a1c52c97e244e995bbf0c1328f7f",
+        "GUID:b2b60b59554a33b41b16ef821fecbac2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,3 +1,5 @@
+using UnityGameFramework.Runtime;
+
 namespace PlayFreely.BuiltinRuntime
 {
     /// <summary>
@@ -14,6 +16,14 @@ namespace PlayFreely.BuiltinRuntime
             private set;
         }
 
+        /// <summary>
+        /// 热更组件
+        /// </summary>
+        public static HybridclrComponent Hybridclr
+        {
+            get; private set;
+        }
+
 
         /// <summary>
         /// 初始化内置模块
@@ -21,6 +31,9 @@ namespace PlayFreely.BuiltinRuntime
         private void InitBuiltinRuntimeComponents( )
         {
             BuiltinRuntimeSettings = AppBuiltinRuntimeSettings.LoadAppBuiltinRuntimesSettings( );
+            Hybridclr = GameEntry.GetComponent<HybridclrComponent>( );
+
+            DontDestroyOnLoad(this);
         }
     }
 }

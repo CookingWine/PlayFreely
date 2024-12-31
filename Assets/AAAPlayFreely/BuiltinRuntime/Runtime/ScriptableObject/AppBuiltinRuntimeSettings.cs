@@ -1,6 +1,5 @@
 using UnityEngine;
 using GameFramework.Resource;
-using System.IO;
 
 namespace PlayFreely.BuiltinRuntime
 {
