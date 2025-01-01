@@ -8,6 +8,21 @@ namespace PlayFreely.HotfixRuntime
     public class HotfixEntry
     {
         /// <summary>
+        /// 有限状态机
+        /// </summary>
+        public static FsmManager FSM { get; private set; }
+
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        public static EventManager Event { get; private set; }
+
+        /// <summary>
+        /// 计时器
+        /// </summary>
+        public static TimerManager Timer { get; private set; }
+
+        /// <summary>
         /// 不可调用,供给HybridclrComponent使用【相当于Mono.Start】
         /// </summary>
         public static void Start( )
