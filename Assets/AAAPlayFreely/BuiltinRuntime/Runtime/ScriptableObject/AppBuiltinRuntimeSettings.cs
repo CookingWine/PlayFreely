@@ -35,7 +35,7 @@ namespace PlayFreely.BuiltinRuntime
         /// <summary>
         /// 加载资源的模式【默认package模式加载】
         /// </summary>
-        public ResourceMode LoadResourceMode = ResourceMode.Package;
+        public ResourceMode LoadResourceMode = ResourceMode.Updatable;
 
         /// <summary>
         /// 屏幕初始设置分辨率
@@ -48,9 +48,9 @@ namespace PlayFreely.BuiltinRuntime
         /// <returns></returns>
         public static AppBuiltinRuntimeSettings LoadAppBuiltinRuntimesSettings( )
         {
-            if(PlayFreelyGameBuiltinEntry.BuiltinRuntimeSettings != null)
+            if(PlayFreelyGameBuiltinEntry.AppBuiltinRuntimeConfigs != null)
             {
-                return PlayFreelyGameBuiltinEntry.BuiltinRuntimeSettings;
+                return PlayFreelyGameBuiltinEntry.AppBuiltinRuntimeConfigs;
             }
             return Resources.Load<AppBuiltinRuntimeSettings>("AppBuiltinRuntimeSettings");
         }

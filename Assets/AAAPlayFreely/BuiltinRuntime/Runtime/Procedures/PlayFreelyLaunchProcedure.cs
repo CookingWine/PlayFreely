@@ -12,7 +12,8 @@ namespace PlayFreely.BuiltinRuntime
         {
             base.OnEnter(procedureOwner);
 
-            PlayFreelyGameBuiltinEntry.BuiltinRuntimeSettings.LoadGameLocalConfig( );
+            //加载游戏本地配置
+            PlayFreelyGameBuiltinEntry.AppBuiltinRuntimeConfigs.LoadGameLocalConfig( );
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner , float elapseSeconds , float realElapseSeconds)
