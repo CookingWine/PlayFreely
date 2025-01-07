@@ -23,11 +23,15 @@ namespace PlayFreely.BuiltinRuntime
         /// </summary>
         private static float m_PingDuration = 0;
 
+#if UNITY_EDITOR
         public float PingDuration;
+#endif
         private void Update( )
         {
             DetectNet( );
+#if  UNITY_EDITOR
             PingDuration = m_PingDuration;
+#endif
         }
 
         /// <summary>

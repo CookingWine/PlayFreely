@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -17,7 +17,7 @@ namespace UnityGameFramework.Runtime
     /// <summary>
     /// 默认声音代理辅助器。
     /// </summary>
-    public class DefaultSoundAgentHelper : SoundAgentHelperBase
+    public class DefaultSoundAgentHelper:SoundAgentHelperBase
     {
         private Transform m_CachedTransform = null;
         private AudioSource m_AudioSource = null;
@@ -59,7 +59,14 @@ namespace UnityGameFramework.Runtime
             }
             set
             {
+#if UNITY_6000_0_OR_NEWER
+                if(m_AudioSource.clip != null)
+                {
+                    m_AudioSource.time = value;
+                }
+#else
                 m_AudioSource.time = value;
+#endif
             }
         }
 
@@ -235,14 +242,14 @@ namespace UnityGameFramework.Runtime
         /// <param name="fadeInSeconds">声音淡入时间，以秒为单位。</param>
         public override void Play(float fadeInSeconds)
         {
-            StopAllCoroutines();
+            StopAllCoroutines( );
 
-            m_AudioSource.Play();
-            if (fadeInSeconds > 0f)
+            m_AudioSource.Play( );
+            if(fadeInSeconds > 0f)
             {
                 float volume = m_AudioSource.volume;
                 m_AudioSource.volume = 0f;
-                StartCoroutine(FadeToVolume(m_AudioSource, volume, fadeInSeconds));
+                StartCoroutine(FadeToVolume(m_AudioSource , volume , fadeInSeconds));
             }
         }
 
@@ -252,15 +259,15 @@ namespace UnityGameFramework.Runtime
         /// <param name="fadeOutSeconds">声音淡出时间，以秒为单位。</param>
         public override void Stop(float fadeOutSeconds)
         {
-            StopAllCoroutines();
+            StopAllCoroutines( );
 
-            if (fadeOutSeconds > 0f && gameObject.activeInHierarchy)
+            if(fadeOutSeconds > 0f && gameObject.activeInHierarchy)
             {
                 StartCoroutine(StopCo(fadeOutSeconds));
             }
             else
             {
-                m_AudioSource.Stop();
+                m_AudioSource.Stop( );
             }
         }
 
@@ -270,16 +277,16 @@ namespace UnityGameFramework.Runtime
         /// <param name="fadeOutSeconds">声音淡出时间，以秒为单位。</param>
         public override void Pause(float fadeOutSeconds)
         {
-            StopAllCoroutines();
+            StopAllCoroutines( );
 
             m_VolumeWhenPause = m_AudioSource.volume;
-            if (fadeOutSeconds > 0f && gameObject.activeInHierarchy)
+            if(fadeOutSeconds > 0f && gameObject.activeInHierarchy)
             {
                 StartCoroutine(PauseCo(fadeOutSeconds));
             }
             else
             {
-                m_AudioSource.Pause();
+                m_AudioSource.Pause( );
             }
         }
 
@@ -289,12 +296,12 @@ namespace UnityGameFramework.Runtime
         /// <param name="fadeInSeconds">声音淡入时间，以秒为单位。</param>
         public override void Resume(float fadeInSeconds)
         {
-            StopAllCoroutines();
+            StopAllCoroutines( );
 
-            m_AudioSource.UnPause();
-            if (fadeInSeconds > 0f)
+            m_AudioSource.UnPause( );
+            if(fadeInSeconds > 0f)
             {
-                StartCoroutine(FadeToVolume(m_AudioSource, m_VolumeWhenPause, fadeInSeconds));
+                StartCoroutine(FadeToVolume(m_AudioSource , m_VolumeWhenPause , fadeInSeconds));
             }
             else
             {
@@ -305,7 +312,7 @@ namespace UnityGameFramework.Runtime
         /// <summary>
         /// 重置声音代理辅助器。
         /// </summary>
-        public override void Reset()
+        public override void Reset( )
         {
             m_CachedTransform.localPosition = Vector3.zero;
             m_AudioSource.clip = null;
@@ -321,7 +328,7 @@ namespace UnityGameFramework.Runtime
         public override bool SetSoundAsset(object soundAsset)
         {
             AudioClip audioClip = soundAsset as AudioClip;
-            if (audioClip == null)
+            if(audioClip == null)
             {
                 return false;
             }
@@ -337,16 +344,16 @@ namespace UnityGameFramework.Runtime
         public override void SetBindingEntity(Entity bindingEntity)
         {
             m_BindingEntityLogic = bindingEntity.Logic;
-            if (m_BindingEntityLogic != null)
+            if(m_BindingEntityLogic != null)
             {
-                UpdateAgentPosition();
+                UpdateAgentPosition( );
                 return;
             }
 
-            if (m_ResetSoundAgentEventHandler != null)
+            if(m_ResetSoundAgentEventHandler != null)
             {
-                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create();
-                m_ResetSoundAgentEventHandler(this, resetSoundAgentEventArgs);
+                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create( );
+                m_ResetSoundAgentEventHandler(this , resetSoundAgentEventArgs);
                 ReferencePool.Release(resetSoundAgentEventArgs);
             }
         }
@@ -360,27 +367,27 @@ namespace UnityGameFramework.Runtime
             m_CachedTransform.position = worldPosition;
         }
 
-        private void Awake()
+        private void Awake( )
         {
             m_CachedTransform = transform;
-            m_AudioSource = gameObject.GetOrAddComponent<AudioSource>();
+            m_AudioSource = gameObject.GetOrAddComponent<AudioSource>( );
             m_AudioSource.playOnAwake = false;
             m_AudioSource.rolloffMode = AudioRolloffMode.Custom;
         }
 
-        private void Update()
+        private void Update( )
         {
-            if (!m_ApplicationPauseFlag && !IsPlaying && m_AudioSource.clip != null && m_ResetSoundAgentEventHandler != null)
+            if(!m_ApplicationPauseFlag && !IsPlaying && m_AudioSource.clip != null && m_ResetSoundAgentEventHandler != null)
             {
-                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create();
-                m_ResetSoundAgentEventHandler(this, resetSoundAgentEventArgs);
+                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create( );
+                m_ResetSoundAgentEventHandler(this , resetSoundAgentEventArgs);
                 ReferencePool.Release(resetSoundAgentEventArgs);
                 return;
             }
 
-            if (m_BindingEntityLogic != null)
+            if(m_BindingEntityLogic != null)
             {
-                UpdateAgentPosition();
+                UpdateAgentPosition( );
             }
         }
 
@@ -389,43 +396,43 @@ namespace UnityGameFramework.Runtime
             m_ApplicationPauseFlag = pause;
         }
 
-        private void UpdateAgentPosition()
+        private void UpdateAgentPosition( )
         {
-            if (m_BindingEntityLogic.Available)
+            if(m_BindingEntityLogic.Available)
             {
                 m_CachedTransform.position = m_BindingEntityLogic.CachedTransform.position;
                 return;
             }
 
-            if (m_ResetSoundAgentEventHandler != null)
+            if(m_ResetSoundAgentEventHandler != null)
             {
-                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create();
-                m_ResetSoundAgentEventHandler(this, resetSoundAgentEventArgs);
+                ResetSoundAgentEventArgs resetSoundAgentEventArgs = ResetSoundAgentEventArgs.Create( );
+                m_ResetSoundAgentEventHandler(this , resetSoundAgentEventArgs);
                 ReferencePool.Release(resetSoundAgentEventArgs);
             }
         }
 
         private IEnumerator StopCo(float fadeOutSeconds)
         {
-            yield return FadeToVolume(m_AudioSource, 0f, fadeOutSeconds);
-            m_AudioSource.Stop();
+            yield return FadeToVolume(m_AudioSource , 0f , fadeOutSeconds);
+            m_AudioSource.Stop( );
         }
 
         private IEnumerator PauseCo(float fadeOutSeconds)
         {
-            yield return FadeToVolume(m_AudioSource, 0f, fadeOutSeconds);
-            m_AudioSource.Pause();
+            yield return FadeToVolume(m_AudioSource , 0f , fadeOutSeconds);
+            m_AudioSource.Pause( );
         }
 
-        private IEnumerator FadeToVolume(AudioSource audioSource, float volume, float duration)
+        private IEnumerator FadeToVolume(AudioSource audioSource , float volume , float duration)
         {
             float time = 0f;
             float originalVolume = audioSource.volume;
-            while (time < duration)
+            while(time < duration)
             {
                 time += UnityEngine.Time.deltaTime;
-                audioSource.volume = Mathf.Lerp(originalVolume, volume, time / duration);
-                yield return new WaitForEndOfFrame();
+                audioSource.volume = Mathf.Lerp(originalVolume , volume , time / duration);
+                yield return new WaitForEndOfFrame( );
             }
 
             audioSource.volume = volume;

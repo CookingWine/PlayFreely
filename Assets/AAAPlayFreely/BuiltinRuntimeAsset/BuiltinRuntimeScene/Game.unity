@@ -1479,7 +1479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05eaceeebe870a4595e51f998ed518b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Skin: {fileID: 0}
+  m_Skin: {fileID: 11400000, guid: e5cc8e195b1172d4e8f63f3703e73df6, type: 2}
   m_ActiveWindow: 0
   m_ShowFullWindow: 0
   m_ConsoleWindow:
@@ -1781,7 +1781,7 @@ MonoBehaviour:
   m_EnablePlaySoundUpdateEvent: 0
   m_EnablePlaySoundDependencyAssetEvent: 0
   m_InstanceRoot: {fileID: 0}
-  m_AudioMixer: {fileID: 0}
+  m_AudioMixer: {fileID: 24100000, guid: 2aee3d13515c07942b2c4f0f05efcd90, type: 2}
   m_SoundHelperTypeName: UnityGameFramework.Runtime.DefaultSoundHelper
   m_CustomSoundHelper: {fileID: 0}
   m_SoundGroupHelperTypeName: UnityGameFramework.Runtime.DefaultSoundGroupHelper
