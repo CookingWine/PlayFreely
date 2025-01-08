@@ -13,6 +13,30 @@ namespace PlayFreely.EditorTools
         /// </summary>
         public const bool AutoScriptUTF8 = true;
 
+        #region 宏定义
+
+        /// <summary>
+        /// 禁用禁用热更模式
+        /// </summary>
+        public const string DISABLE_HYBRIDCLR = "DISABLE_HYBRIDCLR";
+
+        /// <summary>
+        /// 正式服环境
+        /// </summary>
+        public const string PLAYFREELY_OFFICIALLY_LAUNCHED = "PLAYFREELY_OFFICIALLY_LAUNCHED";
+
+        /// <summary>
+        /// 测试服环境
+        /// </summary>
+        public const string PLAYFREELY_CLOSE_BETA = "PLAYFREELY_CLOSE_BETA";
+
+        /// <summary>
+        /// 开发环境
+        /// </summary>
+        public const string PLAYFREELY_DEVELOPMENT_ENVIRONMENT = "PLAYFREELY_DEVELOPMENT_ENVIRONMENT";
+
+        #endregion
+
         #region 程序集
 
         /// <summary>
@@ -43,7 +67,7 @@ namespace PlayFreely.EditorTools
         /// <summary>
         /// 内置运行场景文件【非热更】
         /// </summary>
-        public static string BuiltinRuntimeScenePath => "Assets/AAAPlayFreely/BuiltinRuntimeAsset/BuiltinRuntimeScene";
+        public static string BuiltinRuntimeScenePath => "Assets/BuiltinRuntimeScene";
 
         /// <summary>
         /// 热更运行场景文件【热更】
