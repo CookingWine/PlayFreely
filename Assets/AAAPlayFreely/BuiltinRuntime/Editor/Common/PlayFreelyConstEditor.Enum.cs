@@ -22,7 +22,7 @@ namespace PlayFreely.EditorTools
     /// 游戏数据表
     /// </summary>
     [Flags]
-    public enum PlayFreelyGameRuntimeDataType
+    public enum PlayFreelyGameDataType
     {
         /// <summary>
         /// 数据表

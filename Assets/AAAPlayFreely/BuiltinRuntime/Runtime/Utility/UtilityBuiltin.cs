@@ -20,6 +20,12 @@ namespace PlayFreely.BuiltinRuntime
         /// </summary>
         public static class AssetsPath
         {
+
+            public static string GetCombinePath(params string[] args)
+            {
+                return Utility.Path.GetRegularPath(Path.Combine(args));
+            }
+
             /// <summary>
             /// 加载序列化物体路径
             /// </summary>

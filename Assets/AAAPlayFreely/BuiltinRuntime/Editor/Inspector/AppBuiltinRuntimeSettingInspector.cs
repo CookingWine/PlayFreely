@@ -34,13 +34,13 @@ namespace PlayFreely.EditorTools
         /// </summary>
         private class GameDataScrollView
         {
-            public PlayFreelyGameRuntimeDataType BuiltinGameDataType { get; private set; }
+            public PlayFreelyGameDataType BuiltinGameDataType { get; private set; }
 
             public Vector2 ScrollPosition;
 
             private readonly AppBuiltinRuntimeSettings m_AppBuiltinRuntimeData;
 
-            public GameDataScrollView(AppBuiltinRuntimeSettings appData , PlayFreelyGameRuntimeDataType dataType)
+            public GameDataScrollView(AppBuiltinRuntimeSettings appData , PlayFreelyGameDataType dataType)
             {
                 m_AppBuiltinRuntimeData = appData;
                 BuiltinGameDataType = dataType;

@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3d2dc683ea0384592593b8b8fbfcb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Live2DCamera: {fileID: 0}
+  m_Live2DCamera: {fileID: 198323922}
 --- !u!1 &265671497
 GameObject:
   m_ObjectHideFlags: 0

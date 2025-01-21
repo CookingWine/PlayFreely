@@ -74,11 +74,6 @@ namespace PlayFreely.EditorTools
         /// </summary>
         public static string HotfixRuntimeScenePath => "Assets/AAAPlayFreely/HotfixRuntimeAsset/HotfixScene";
 
-        #region 数据表
-
-
-
-        #endregion
 
         //----------------------------------------------↑↑↑↑↑Assets内↑↑↑↑↑----------------------------------------------------------------------------------------//
 
@@ -86,24 +81,17 @@ namespace PlayFreely.EditorTools
         //----------------------------------------------↓↓↓↓↓Project内↓↓↓↓----------------------------------------------------------------------------------------//
 
         /// <summary>
-        /// 【热更】游戏场景配置表
+        /// 数据表excel目录
         /// </summary>
-        public static string HotfixPlayFreelyGameScenesPath => GetPlayFreelyProjectDataTablePath(PlayFreelyLoadAssetType.HotfixRuntimeAssets , "PlayFreelyGameScenes.xlsx");
-
+        public static string DataTableExcelPath => GetPlayFreelyProjectDataTablePath("DataTables");
         /// <summary>
-        /// 【热更】游戏界面配置表
+        /// 配置表excel目录
         /// </summary>
-        public static string HotfixPlayFreelyGameUIFormPath => GetPlayFreelyProjectDataTablePath(PlayFreelyLoadAssetType.HotfixRuntimeAssets , "PlayFreelyGameUIForm.xlsx");
-
+        public static string ConfigeExcelPath => GetPlayFreelyProjectDataTablePath("Configs");
         /// <summary>
-        /// 【热更】游戏背景音乐配置表
+        /// 语言本地化excel目录
         /// </summary>
-        public static string HotfixPlayFreelyGameMusicPath => GetPlayFreelyProjectDataTablePath(PlayFreelyLoadAssetType.HotfixRuntimeAssets , "PlayFreelyGameMusic.xlsx");
-
-        /// <summary>
-        /// 【热更】游戏UI音效配置表
-        /// </summary>
-        public static string HotfixPlayFreelyGameUISoundPath => GetPlayFreelyProjectDataTablePath(PlayFreelyLoadAssetType.HotfixRuntimeAssets , "PlayFreelyGameUISound.xlsx");
+        public static string LanguageExcelPath => GetPlayFreelyProjectDataTablePath("Languages");
 
 
         //----------------------------------------------↑↑↑↑↑Project内↑↑↑↑↑----------------------------------------------------------------------------------------//
@@ -111,17 +99,9 @@ namespace PlayFreely.EditorTools
         #endregion
 
 
-        /// <summary>
-        /// 获取project下的数据表的资源路径
-        /// </summary>
-        /// <param name="loadType">资源类型</param>
-        /// <param name="names">资源名称【需要带后缀】</param>
-        /// <returns></returns>
-        private static string GetPlayFreelyProjectDataTablePath(PlayFreelyLoadAssetType loadType , string names)
+        private static string GetPlayFreelyProjectDataTablePath(string fileName)
         {
-            string assetType = loadType == PlayFreelyLoadAssetType.BuiltinRuntimeAssets ? "BuiltinRuntime" : "HotfixRuntime";
-
-            return Path.Combine(Directory.GetParent(Application.dataPath).FullName , $"PlayFreelyDataTable/{assetType}/{names}");
+            return Path.Combine(Directory.GetParent(Application.dataPath).FullName , $"PlayFreelyDataTable/{fileName}");
         }
     }
 }
