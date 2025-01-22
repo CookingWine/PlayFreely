@@ -69,6 +69,8 @@ namespace PlayFreely.HotfixRuntime
             s_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccessCallback , OnLoadAssetFailureCallback);
         }
 
+       
+
         /// <summary>
         /// 打开UI成功回调
         /// </summary>

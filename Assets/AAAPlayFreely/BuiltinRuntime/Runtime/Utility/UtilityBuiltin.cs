@@ -20,26 +20,163 @@ namespace PlayFreely.BuiltinRuntime
         /// </summary>
         public static class AssetsPath
         {
-
+            /// <summary>
+            /// 获取规范路径
+            /// </summary>
+            /// <param name="args"></param>
+            /// <returns></returns>
             public static string GetCombinePath(params string[] args)
             {
                 return Utility.Path.GetRegularPath(Path.Combine(args));
             }
 
             /// <summary>
+            /// 获取配置路径
+            /// </summary>
+            /// <param name="name">配置名称</param>
+            /// <param name="userBytes">是否使用二进制文件</param>
+            /// <returns></returns>
+            public static string GetConfigPath(string name , bool userBytes)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Config/{0}.{1}" , name , userBytes ? "bytes" : "txt");
+            }
+
+            /// <summary>
+            /// 获取数据表路径
+            /// </summary>
+            /// <param name="name">文件名称</param>
+            /// <param name="userBytes">是否加载二进制文件</param>
+            /// <returns></returns>
+            public static string GetDataTablePath(string name , bool userBytes)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/DataTable/{0}.{1}" , name , userBytes ? "bytes" : "txt");
+            }
+
+            /// <summary>
+            /// 获取语言文件路径
+            /// </summary>
+            /// <param name="name">本地化语言名称</param>
+            /// <param name="userBytes">是否使用二进制文件</param>
+            /// <returns></returns>
+            public static string GetLanguagePath(string name , bool userBytes)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Language/{0}.{1}" , name , userBytes ? "bytes" : "json");
+            }
+
+            /// <summary>
+            /// 获取音效路径
+            /// </summary>
+            /// <param name="name">音效名称</param>
+            /// <returns></returns>
+            public static string GetSoundPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Audio/{0}" , name);
+            }
+
+            /// <summary>
+            /// 获取音乐路径
+            /// </summary>
+            /// <param name="name">音乐名称</param>
+            /// <returns></returns>
+            public static string GetMusicPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Music/{0}" , name);
+            }
+
+            /// <summary>
+            /// 获取场景路径
+            /// </summary>
+            /// <param name="name">场景名称</param>
+            /// <returns></returns>
+            public static string GetScenePath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/HotfixScene/{0}.unity" , name);
+            }
+
+            /// <summary>
+            /// 获取实体路径
+            /// </summary>
+            /// <param name="name">实体名称</param>
+            /// <returns></returns>
+            public static string GetEntityPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Entity/{0}.prefab" , name);
+            }
+
+            /// <summary>
+            /// 获取UI界面的路径
+            /// </summary>
+            /// <param name="name">界面名称</param>
+            /// <returns></returns>
+            public static string GetUIFormPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/UI/{0}.prefab" , name);
+            }
+
+            /// <summary>
+            /// 获取纹理路径
+            /// </summary>
+            /// <param name="name">纹理名称</param>
+            /// <returns></returns>
+            public static string GetTexturePath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Textures/{0}" , name);
+            }
+
+            /// <summary>
+            /// 获取精灵图路径
+            /// </summary>
+            /// <param name="name">精灵图名称</param>
+            /// <returns></returns>
+            public static string GetSpritesPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Sprites{0}" , name);
+            }
+
+            /// <summary>
+            /// 获取预制体路径
+            /// </summary>
+            /// <param name="name">预制体名称</param>
+            /// <returns></returns>
+            public static string GetPrefab(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Prefab/{0}.prefab" , name);
+            }
+
+            /// <summary>
+            /// 获取材质球路径
+            /// </summary>
+            /// <param name="name">材质球名称</param>
+            /// <returns></returns>
+            public static string GetMaterialPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/Material/{0}.mat" , name);
+            }
+
+            /// <summary>
+            /// 获取热更dll文件
+            /// </summary>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public static string GetHotfixDllPath(string name)
+            {
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/HotfixDll/{0}.bytes" , name);
+            }
+
+            /// <summary>
             /// 加载序列化物体路径
             /// </summary>
-            /// <param name="v"></param>
+            /// <param name="name">资源名称</param>
             /// <returns></returns>
-            public static string GetHotfixScriptableAsset(string v)
+            public static string GetHotfixScriptableAsset(string name)
             {
-                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/ScriptableObject/{0}.asset" , v);
+                return Utility.Text.Format("Assets/AAAPlayFreely/HotfixRuntimeAsset/ScriptableObject/{0}.asset" , name);
             }
         }
 
         /// <summary>
         /// Bezier扩展
-        /// </summary>
+        /// </summary>  
         public static class BezierExtend
         {
             /// <summary>
@@ -296,6 +433,8 @@ namespace PlayFreely.BuiltinRuntime
                 return sb.ToString( );
             }
         }
+
+        
     }
     /// <summary>
     /// Vector扩展

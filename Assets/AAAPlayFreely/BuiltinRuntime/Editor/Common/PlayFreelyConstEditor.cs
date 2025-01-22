@@ -6,7 +6,7 @@ namespace PlayFreely.EditorTools
     /// <summary>
     /// 默认编辑器配置项
     /// </summary>
-    public class PlayFreelyConstEditor
+    internal class PlayFreelyConstEditor
     {
         /// <summary>
         /// 新建脚本时自动修改脚本编码方式为utf-8以支持中文
