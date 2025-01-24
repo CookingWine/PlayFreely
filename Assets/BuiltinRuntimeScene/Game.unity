@@ -359,6 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 227e58c00ae21d740b9ad1eb6b67639b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_AVProPlayer: {fileID: 0}
 --- !u!1 &945244023
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +496,7 @@ Camera:
   field of view: 1
   orthographic: 1
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 32
@@ -603,7 +604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ed40c8dd4229d428a8c0c6f492e620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PingDuration: 0
 --- !u!1 &1195442230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,7 +1733,7 @@ MonoBehaviour:
   m_InstanceRoot: {fileID: 0}
   m_UIFormHelperTypeName: UnityGameFramework.Runtime.DefaultUIFormHelper
   m_CustomUIFormHelper: {fileID: 0}
-  m_UIGroupHelperTypeName: UnityGameFramework.Runtime.DefaultUIGroupHelper
+  m_UIGroupHelperTypeName: PlayFreely.BuiltinRuntime.PlayFreelyUGuiGroupHelper
   m_CustomUIGroupHelper: {fileID: 0}
   m_UIGroups:
   - m_Name: BaseUI
@@ -1831,6 +1831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AvailableProcedureTypeNames:
   - PlayFreely.BuiltinRuntime.PlayFreelyLaunchProcedure
+  - PlayFreely.BuiltinRuntime.PlayFreelyNetworkVerificationProcedure
   m_EntranceProcedureTypeName: PlayFreely.BuiltinRuntime.PlayFreelyLaunchProcedure
 --- !u!114 &7001133529712281887
 MonoBehaviour:

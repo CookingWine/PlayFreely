@@ -1,6 +1,6 @@
-using System.Collections;
+using System;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityGameFramework.Runtime;
 
 namespace PlayFreely.BuiltinRuntime
@@ -11,77 +11,52 @@ namespace PlayFreely.BuiltinRuntime
     public class BuiltinRuntimeComponent:GameFrameworkComponent
     {
         /// <summary>
-        /// 下一次ping的时间
+        /// 非热更主界面
         /// </summary>
-        private static float m_LastPingTime = 0;
-        /// <summary>
-        /// 开始ping的时间
-        /// </summary>
-        private static float m_StartPingTime = 0;
-        /// <summary>
-        /// 延迟时间
-        /// </summary>
-        private static float m_PingDuration = 0;
-
-#if UNITY_EDITOR
-        public float PingDuration;
-#endif
-        private void Update( )
+        public BuiltinRuntimeInterface RuntimeInterface
         {
-            DetectNet( );
-#if  UNITY_EDITOR
-            PingDuration = m_PingDuration;
-#endif
+            get;
+            private set;
         }
 
         /// <summary>
-        /// 检测网络
+        /// 加载默认界面UI
         /// </summary>
-        private void DetectNet( )
+        /// <param name="loadInterfaceCompelet">界面加载完成</param>
+        public async void InitDefalutResourceUI(Action<bool> loadInterfaceCompelet)
         {
-            //10秒超时继续ping
-            if(m_StartPingTime > 0 && Time.time - m_StartPingTime > 10)
+            GameFramework.UI.IUIGroup group = PlayFreelyGameBuiltinEntry.UI.GetUIGroup("BaseUI");
+            if(group == null)
             {
-                m_StartPingTime = 0;
-            }
-            if(m_StartPingTime > 0)
-            {
+                Log.Warning("Not find IUIGroup by name :BaseUI");
                 return;
             }
-            bool canExec = false;
-            if(m_LastPingTime == 0)
-            {
-                canExec = true;
-            }
-            else if(Time.time - m_LastPingTime > 3)
-            {
-                canExec = true;
-            }
-            if(!canExec)
-            {
-                return;
-            }
-            m_StartPingTime = Time.time + 0.0001f;
-            StartCoroutine(PingNet("https://www.baidu.com"));
+            PlayFreelyUGuiGroupHelper gui = (PlayFreelyUGuiGroupHelper)group.Helper;
+            await LoadBuiltinRuntimeInterface(gui.transform , loadInterfaceCompelet);
         }
 
-
         /// <summary>
-        /// ping 网络
+        /// 加载主界面
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="pingTag"></param>
         /// <returns></returns>
-        private IEnumerator PingNet(string url)
+        private async Task LoadBuiltinRuntimeInterface(Transform root , Action<bool> loadInterfaceCompelet)
         {
-            UnityWebRequest request = new UnityWebRequest(url);
-            yield return request.SendWebRequest( );
-            if(request.result != UnityWebRequest.Result.ProtocolError)
+            ResourceRequest request = Resources.LoadAsync<GameObject>("UIPrefab/BuiltinRuntimeInterface");
+            await request;
+            if(request.asset != null)
             {
-                m_PingDuration = Time.time - m_StartPingTime;
-                //Ping成功了
-                m_StartPingTime = 0;
-                m_LastPingTime = Time.time + 0.0001f;
+                GameObject interfaceObject = request.asset as GameObject;
+                GameObject go = Instantiate(interfaceObject);
+                go.transform.SetParent(root);
+                go.transform.SetLocalPositionAndRotation(Vector3.one , Quaternion.identity);
+                go.transform.localScale = Vector3.one;
+                RuntimeInterface = go.GetComponent<BuiltinRuntimeInterface>( );
+                RuntimeInterface.InitInterfaceData( );
+                loadInterfaceCompelet?.Invoke(true);
+            }
+            else
+            {
+                loadInterfaceCompelet?.Invoke(false);
             }
         }
     }

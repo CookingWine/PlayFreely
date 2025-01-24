@@ -31,6 +31,20 @@ namespace PlayFreely.BuiltinRuntime
             }
         }
 #endif
+        /// <summary>
+        /// 屏幕适配模式
+        /// </summary>
+        public enum ScreenFitMode
+        {
+            /// <summary>
+            /// 宽度适配
+            /// </summary>
+            Width,
+            /// <summary>
+            /// 高度适配
+            /// </summary>
+            Height,
+        }
 
         /// <summary>
         /// 加载资源的模式【默认package模式加载】
@@ -41,6 +55,11 @@ namespace PlayFreely.BuiltinRuntime
         /// 屏幕初始设置分辨率
         /// </summary>
         public Vector2Int DesignResolution;
+
+        /// <summary>
+        /// UI适配模式
+        /// </summary>
+        public ScreenFitMode UIFitMode { get; private set; } = ScreenFitMode.Width;
 
         /// <summary>
         /// 加载内置设置模块
@@ -60,7 +79,7 @@ namespace PlayFreely.BuiltinRuntime
         /// </summary>
         public void LoadGameLocalConfig( )
         {
-           
+
         }
 
     }

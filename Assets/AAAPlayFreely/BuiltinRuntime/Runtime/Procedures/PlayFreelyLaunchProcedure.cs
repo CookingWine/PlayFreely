@@ -12,13 +12,25 @@ namespace PlayFreely.BuiltinRuntime
         {
             base.OnEnter(procedureOwner);
 
+            IsEnterNextProcedure = false;
+
             //加载游戏本地配置
             PlayFreelyGameBuiltinEntry.AppBuiltinRuntimeConfigs.LoadGameLocalConfig( );
+
+            //加载初始界面
+            PlayFreelyGameBuiltinEntry.BuiltinRuntimeData.InitDefalutResourceUI((load) =>
+            {
+                IsEnterNextProcedure = load;
+            });
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner , float elapseSeconds , float realElapseSeconds)
         {
             base.OnUpdate(procedureOwner , elapseSeconds , realElapseSeconds);
+            if(IsEnterNextProcedure)
+            {
+                ChangeState<PlayFreelyNetworkVerificationProcedure>(procedureOwner);
+            }
         }
 
         protected override void OnLeave(ProcedureOwner procedureOwner , bool isShutdown)

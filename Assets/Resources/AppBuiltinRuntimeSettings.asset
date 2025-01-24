@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8fd29abf41549e4fa0ed0bef60cbd84, type: 3}
   m_Name: AppBuiltinRuntimeSettings
   m_EditorClassIdentifier: 
-  LoadResourceMode: 1
-  DesignResolution: {x: 2560, y: 1440}
+  LoadResourceMode: 2
+  DesignResolution: {x: 2400, y: 1280}

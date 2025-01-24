@@ -7,6 +7,10 @@ namespace PlayFreely.BuiltinRuntime
     /// </summary>
     public class AVProComponent:GameFrameworkComponent
     {
+       
+        private void Start( )
+        {
 
+        }
     }
 }

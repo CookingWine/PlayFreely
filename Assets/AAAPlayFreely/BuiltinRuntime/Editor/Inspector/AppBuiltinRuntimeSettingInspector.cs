@@ -4,92 +4,92 @@ using UnityEngine;
 
 namespace PlayFreely.EditorTools
 {
-    /// <summary>
-    /// AppBuiltinRuntimeSetting界面重绘
-    /// </summary>
-    [CustomEditor(typeof(AppBuiltinRuntimeSettings))]
-    public class AppBuiltinRuntimeSettingInspector:Editor
-    {
-        private class ItemData
-        {
-            /// <summary>
-            /// 是否选中
-            /// </summary>
-            public bool IsOn { get; set; }
+    ///// <summary>
+    ///// AppBuiltinRuntimeSetting界面重绘
+    ///// </summary>
+    //[CustomEditor(typeof(AppBuiltinRuntimeSettings))]
+    //public class AppBuiltinRuntimeSettingInspector:Editor
+    //{
+    //    private class ItemData
+    //    {
+    //        /// <summary>
+    //        /// 是否选中
+    //        /// </summary>
+    //        public bool IsOn { get; set; }
 
-            /// <summary>
-            /// 表格名称
-            /// </summary>
-            public string ExcelName { get; }
+    //        /// <summary>
+    //        /// 表格名称
+    //        /// </summary>
+    //        public string ExcelName { get; }
 
-            public ItemData(bool isOn , string excelName)
-            {
-                IsOn = isOn;
-                ExcelName = excelName;
-            }
-        }
+    //        public ItemData(bool isOn , string excelName)
+    //        {
+    //            IsOn = isOn;
+    //            ExcelName = excelName;
+    //        }
+    //    }
 
-        /// <summary>
-        /// 数据滑动列表
-        /// </summary>
-        private class GameDataScrollView
-        {
-            public PlayFreelyGameDataType BuiltinGameDataType { get; private set; }
+    //    /// <summary>
+    //    /// 数据滑动列表
+    //    /// </summary>
+    //    private class GameDataScrollView
+    //    {
+    //        public PlayFreelyGameDataType BuiltinGameDataType { get; private set; }
 
-            public Vector2 ScrollPosition;
+    //        public Vector2 ScrollPosition;
 
-            private readonly AppBuiltinRuntimeSettings m_AppBuiltinRuntimeData;
+    //        private readonly AppBuiltinRuntimeSettings m_AppBuiltinRuntimeData;
 
-            public GameDataScrollView(AppBuiltinRuntimeSettings appData , PlayFreelyGameDataType dataType)
-            {
-                m_AppBuiltinRuntimeData = appData;
-                BuiltinGameDataType = dataType;
-
-
-            }
-
-            /// <summary>
-            /// 重新加载
-            /// </summary>
-            public void Reload( )
-            {
-                if(m_AppBuiltinRuntimeData != null)
-                {
-                    return;
-                }
-
-            }
-        }
+    //        public GameDataScrollView(AppBuiltinRuntimeSettings appData , PlayFreelyGameDataType dataType)
+    //        {
+    //            m_AppBuiltinRuntimeData = appData;
+    //            BuiltinGameDataType = dataType;
 
 
-        /// <summary>
-        /// app设置资源
-        /// </summary>
-        private AppBuiltinRuntimeSettings m_AppBuiltinRuntimeSettings;
+    //        }
+
+    //        /// <summary>
+    //        /// 重新加载
+    //        /// </summary>
+    //        public void Reload( )
+    //        {
+    //            if(m_AppBuiltinRuntimeData != null)
+    //            {
+    //                return;
+    //            }
+
+    //        }
+    //    }
 
 
-        private void OnEnable( )
-        {
-            m_AppBuiltinRuntimeSettings = (AppBuiltinRuntimeSettings)target;
-        }
-
-        private void OnDisable( )
-        {
+    //    /// <summary>
+    //    /// app设置资源
+    //    /// </summary>
+    //    private AppBuiltinRuntimeSettings m_AppBuiltinRuntimeSettings;
 
 
-        }
+    //    private void OnEnable( )
+    //    {
+    //        m_AppBuiltinRuntimeSettings = (AppBuiltinRuntimeSettings)target;
+    //    }
 
-        public override void OnInspectorGUI( )
-        {
-
-        }
-
-        private void SaveConfigs(AppBuiltinRuntimeSettings configs)
-        {
+    //    private void OnDisable( )
+    //    {
 
 
+    //    }
 
-        }
+    //    public override void OnInspectorGUI( )
+    //    {
 
-    }
+    //    }
+
+    //    private void SaveConfigs(AppBuiltinRuntimeSettings configs)
+    //    {
+
+
+
+    //    }
+
+    //}
 }

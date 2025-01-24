@@ -434,13 +434,30 @@ namespace PlayFreely.BuiltinRuntime
             }
         }
 
-        
+
     }
+
     /// <summary>
-    /// Vector扩展
+    /// 扩展
     /// </summary>
-    public static class VectorExtend
+    public static class PlayFreelyExtend
     {
+
+        /// <summary>
+        /// 获取组件
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <param name="go">物体</param>
+        /// <returns>目标组件</returns>
+        public static T GetOrAddComponent<T>(this GameObject go) where T : Component
+        {
+            if(go.GetComponent<T>( ) == null)
+            {
+                go.AddComponent<T>( );
+            }
+            return go.GetComponent<T>( );
+        }
+
         /// <summary>
         /// 字节组转string
         /// </summary>
@@ -496,6 +513,5 @@ namespace PlayFreely.BuiltinRuntime
             }
             return false;
         }
-
     }
 }

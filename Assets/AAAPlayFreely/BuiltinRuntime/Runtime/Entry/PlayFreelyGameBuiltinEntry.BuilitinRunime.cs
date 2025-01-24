@@ -62,7 +62,6 @@ namespace PlayFreely.BuiltinRuntime
             Hybridclr = GameEntry.GetComponent<HybridclrComponent>( );
             Live2D = GameEntry.GetComponent<Live2DComponent>( );
             AVProData = GameEntry.GetComponent<AVProComponent>( );
-            DontDestroyOnLoad(this);
         }
     }
 }

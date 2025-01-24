@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using ProcedureOwner = GameFramework.Fsm.IFsm<GameFramework.Procedure.IProcedureManager>;
 namespace PlayFreely.BuiltinRuntime
@@ -11,7 +12,7 @@ namespace PlayFreely.BuiltinRuntime
         /// <summary>
         /// 是否使用本地对话框
         /// </summary>
-        private bool m_UseNativeDialog; 
+        private bool m_UseNativeDialog;
 
         public override bool UseNativeDialog
         {
@@ -27,6 +28,9 @@ namespace PlayFreely.BuiltinRuntime
             base.OnEnter(procedureOwner);
             m_UseNativeDialog = true;
             IsEnterNextProcedure = Application.internetReachability != NetworkReachability.NotReachable;
+
+            Resources.UnloadUnusedAssets( );
+            GC.Collect( );
         }
 
         protected override void OnUpdate(ProcedureOwner procedureOwner , float elapseSeconds , float realElapseSeconds)

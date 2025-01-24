@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------
+//------------------------------------------------------------
 // Game Framework
 // Copyright © 2013-2021 Jiang Yin. All rights reserved.
 // Homepage: https://gameframework.cn/
@@ -79,8 +79,7 @@ namespace GameFramework
                     throw new GameFrameworkException("Type name is invalid.");
                 }
 
-                Type type = null;
-                if (s_CachedTypes.TryGetValue(typeName, out type))
+                if(s_CachedTypes.TryGetValue(typeName , out Type type))
                 {
                     return type;
                 }
