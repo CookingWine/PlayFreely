@@ -21,6 +21,11 @@ namespace PlayFreely.BuiltinRuntime
             PlayFreelyGameBuiltinEntry.BuiltinRuntimeData.InitDefalutResourceUI((load) =>
             {
                 IsEnterNextProcedure = load;
+                if(!load)
+                {
+                    UnityGameFramework.Runtime.Log.Fatal("Failed to load default interface.");
+                    PlayFreelyGameBuiltinEntry.Shutdown(UnityGameFramework.Runtime.ShutdownType.Restart);
+                }
             });
         }
 

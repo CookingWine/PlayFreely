@@ -57,11 +57,6 @@ namespace PlayFreely.BuiltinRuntime
         public Vector2Int DesignResolution;
 
         /// <summary>
-        /// UI适配模式
-        /// </summary>
-        public ScreenFitMode UIFitMode { get; private set; } = ScreenFitMode.Width;
-
-        /// <summary>
         /// 加载内置设置模块
         /// </summary>
         /// <returns></returns>
@@ -79,7 +74,7 @@ namespace PlayFreely.BuiltinRuntime
         /// </summary>
         public void LoadGameLocalConfig( )
         {
-
+            //PlayFreelyGameBuiltinEntry.Config.ReadData("");
         }
 
     }

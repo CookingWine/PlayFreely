@@ -36,7 +36,7 @@ namespace PlayFreely.BuiltinRuntime
         protected override void Awake( )
         {
             base.Awake( );
-            Live2DParentNode = transform;
+            Live2DParentNode = this.transform;
             InitLive2DConfigs( );
         }
 

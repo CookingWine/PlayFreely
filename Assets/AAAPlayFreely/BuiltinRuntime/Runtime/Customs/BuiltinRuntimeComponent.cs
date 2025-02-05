@@ -46,11 +46,9 @@ namespace PlayFreely.BuiltinRuntime
             if(request.asset != null)
             {
                 GameObject interfaceObject = request.asset as GameObject;
-                GameObject go = Instantiate(interfaceObject);
-                go.transform.SetParent(root);
-                go.transform.SetLocalPositionAndRotation(Vector3.one , Quaternion.identity);
-                go.transform.localScale = Vector3.one;
-                RuntimeInterface = go.GetComponent<BuiltinRuntimeInterface>( );
+                RuntimeInterface = Instantiate(interfaceObject , root.transform).GetComponent<BuiltinRuntimeInterface>( );
+                RuntimeInterface.transform.SetLocalPositionAndRotation(Vector3.one , Quaternion.identity);
+                RuntimeInterface.transform.localScale = Vector3.one;
                 RuntimeInterface.InitInterfaceData( );
                 loadInterfaceCompelet?.Invoke(true);
             }

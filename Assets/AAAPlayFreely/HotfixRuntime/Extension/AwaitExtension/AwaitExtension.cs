@@ -2,6 +2,7 @@ using GameFramework;
 using GameFramework.Event;
 using GameFramework.Resource;
 using PlayFreely.BuiltinRuntime;
+using System;
 using System.Threading.Tasks;
 using UnityGameFramework.Runtime;
 
@@ -16,9 +17,9 @@ namespace PlayFreely.HotfixRuntime
         /// 加载UI
         /// </summary>
         private static TaskCompletionSource<UIForm> s_UIFormTcs;
-       /// <summary>
-       /// 加载实体
-       /// </summary>
+        /// <summary>
+        /// 加载实体
+        /// </summary>
         private static TaskCompletionSource<Entity> s_EntityTcs;
         /// <summary>
         /// 加载场景
@@ -69,8 +70,6 @@ namespace PlayFreely.HotfixRuntime
             s_LoadAssetCallbacks = new LoadAssetCallbacks(OnLoadAssetSuccessCallback , OnLoadAssetFailureCallback);
         }
 
-       
-
         /// <summary>
         /// 打开UI成功回调
         /// </summary>
@@ -78,7 +77,12 @@ namespace PlayFreely.HotfixRuntime
         /// <param name="e"></param>
         private static void OnOpenUIFormSuccessCallback(object sender , GameEventArgs e)
         {
-
+            OpenUIFormSuccessEventArgs us = (OpenUIFormSuccessEventArgs)e;
+            if(s_UIFormSerialId.HasValue && us.UIForm.SerialId == s_UIFormSerialId.Value)
+            {
+                s_UIFormTcs.SetResult(us.UIForm);
+                s_UIFormTcs = null;
+            }
         }
         /// <summary>
         /// 打开UI失败回调
@@ -87,7 +91,12 @@ namespace PlayFreely.HotfixRuntime
         /// <param name="e"></param>
         private static void OnOpenUIFormFailureCallback(object sender , GameEventArgs e)
         {
-
+            OpenUIFormFailureEventArgs ne = (OpenUIFormFailureEventArgs)e;
+            if(s_UIFormSerialId.HasValue && ne.SerialId == s_UIFormSerialId.Value)
+            {
+                s_UIFormTcs.SetException(new GameFrameworkException(ne.ErrorMessage));
+                s_UIFormTcs = null;
+            }
         }
 
         /// <summary>

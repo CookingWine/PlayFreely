@@ -214,5 +214,14 @@ namespace PlayFreely.BuiltinRuntime
             WebRequest = GameEntry.GetComponent<WebRequestComponent>( );
         }
 
+        /// <summary>
+        /// 关闭游戏框架
+        /// </summary>
+        /// <param name="shutdownType"></param>
+        public static void Shutdown(ShutdownType shutdownType)
+        {
+            GameEntry.Shutdown(shutdownType);
+        }
+
     }
 }
