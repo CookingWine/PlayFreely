@@ -11,28 +11,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using PlayFreely.HotfixRuntime;
+using PlayFreely.EditorTools;
 namespace GameFramework.Editor.DataTableTools
 {
     public sealed class DataTableGenerator
     {
-        private static readonly Regex EndWithNumberRegex = new Regex(@"\d+$");
+
         private static readonly Regex NameRegex = new Regex(@"^[A-Z][A-Za-z0-9_]*$");
 
         public static DataTableProcessor CreateDataTableProcessor(string dataTableFile)
         {
-            return new DataTableProcessor(dataTableFile, Encoding.UTF8, 1, 2, null, 3, 4, 1);
+            return new DataTableProcessor(dataTableFile , Encoding.UTF8 , 1 , 2 , null , 3 , 4 , 1);
         }
-        public static bool CheckRawData(DataTableProcessor dataTableProcessor, string dataTableFile)
+        public static bool CheckRawData(DataTableProcessor dataTableProcessor , string dataTableFile)
         {
-            for (int i = 0; i < dataTableProcessor.RawColumnCount; i++)
+            for(int i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
                 string name = dataTableProcessor.GetName(i);
-                if (string.IsNullOrEmpty(name) || name == "#")
+                if(string.IsNullOrEmpty(name) || name == "#")
                 {
                     continue;
                 }
 
-                if (!NameRegex.IsMatch(name))
+                if(!NameRegex.IsMatch(name))
                 {
                     Debug.LogWarning($"数据表'{dataTableFile}'中字段名'{name}'不合法. 字段名必须以大写字母开头、只包含字母下划线字符");
                     return false;
@@ -42,72 +43,83 @@ namespace GameFramework.Editor.DataTableTools
             return true;
         }
 
-        public static void GenerateDataFile(DataTableProcessor dataTableProcessor, string dataTableFile)
+        public static void GenerateDataFile(DataTableProcessor dataTableProcessor , string dataTableFile)
         {
-            string binaryDataFileName = Path.ChangeExtension(dataTableFile, ".bytes");
-            if (!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
+            string binaryDataFileName = Path.ChangeExtension(dataTableFile , ".bytes");
+            if(!dataTableProcessor.GenerateDataFile(binaryDataFileName) && File.Exists(binaryDataFileName))
             {
                 File.Delete(binaryDataFileName);
             }
         }
-        public static void GenerateCodeFile(DataTableProcessor dataTableProcessor, string dataTableFile)
+        /// <summary>
+        /// 创建代码文件
+        /// </summary>
+        /// <param name="dataTableProcessor"></param>
+        /// <param name="dataTableFile"></param>
+        public static void GenerateCodeFile(DataTableProcessor dataTableProcessor , string dataTableFile)
         {
-           
+            dataTableProcessor.SetCodeTemplate(PlayFreelyConstEditor.DataTableCodeTemplate , Encoding.UTF8);
+            dataTableProcessor.SetCodeGenerator(DataTableCodeGenerator);
+            string dataTableName = GameDataGenerator.GetGameDataRelativeName(dataTableFile , PlayFreelyConstEditor.DataTablePath);
+            string csharpCodeFileName = Utility.Path.GetRegularPath(Path.Combine(PlayFreelyConstEditor.DataTableCodePath , dataTableName + ".cs"));
+            if(!dataTableProcessor.GenerateCodeFile("" , Encoding.UTF8 , dataTableFile))
+            {
+                Debug.LogError(Utility.Text.Format("生成{0}数据表结构失败:{1}" , csharpCodeFileName , dataTableName));
+            }
         }
 
-        private static void DataTableCodeGenerator(DataTableProcessor dataTableProcessor, StringBuilder codeContent, object userData)
+        private static void DataTableCodeGenerator(DataTableProcessor dataTableProcessor , StringBuilder codeContent , object userData)
         {
             string dataTableClassName = Path.GetFileNameWithoutExtension((string)userData);
-            codeContent.Replace("__DATA_TABLE_CLASS_NAME__", dataTableClassName);
-            codeContent.Replace("__DATA_TABLE_COMMENT__", dataTableProcessor.GetValue(0, 1));
-            codeContent.Replace("__DATA_TABLE_ID_COMMENT__", dataTableProcessor.GetComment(dataTableProcessor.IdColumn));
-            codeContent.Replace("__DATA_TABLE_PROPERTIES__", GenerateDataTableProperties(dataTableProcessor));
-            codeContent.Replace("__DATA_TABLE_PARSER__", GenerateDataTableParser(dataTableProcessor));
-            //codeContent.Replace("__DATA_TABLE_PROPERTY_ARRAY__", GenerateDataTablePropertyArray(dataTableProcessor));
+            codeContent.Replace("__DATA_TABLE_CLASS_NAME__" , dataTableClassName);
+            codeContent.Replace("__DATA_TABLE_COMMENT__" , dataTableProcessor.GetValue(0 , 1));
+            codeContent.Replace("__DATA_TABLE_ID_COMMENT__" , dataTableProcessor.GetComment(dataTableProcessor.IdColumn));
+            codeContent.Replace("__DATA_TABLE_PROPERTIES__" , GenerateDataTableProperties(dataTableProcessor));
+            codeContent.Replace("__DATA_TABLE_PARSER__" , GenerateDataTableParser(dataTableProcessor));
         }
 
         private static string GenerateDataTableProperties(DataTableProcessor dataTableProcessor)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder( );
             bool firstProperty = true;
-            for (int i = 0; i < dataTableProcessor.RawColumnCount; i++)
+            for(int i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
-                if (dataTableProcessor.IsCommentColumn(i))
+                if(dataTableProcessor.IsCommentColumn(i))
                 {
                     // 注释列
                     continue;
                 }
 
-                if (dataTableProcessor.IsIdColumn(i))
+                if(dataTableProcessor.IsIdColumn(i))
                 {
                     // 编号列
                     continue;
                 }
 
-                if (firstProperty)
+                if(firstProperty)
                 {
                     firstProperty = false;
                 }
                 else
                 {
-                    stringBuilder.AppendLine().AppendLine();
+                    stringBuilder.AppendLine( ).AppendLine( );
                 }
                 string dataTypeKeyword = dataTableProcessor.GetLanguageKeyword(i);
                 string dataComment = dataTableProcessor.GetComment(i);
-                if (dataTypeKeyword == "enum")
+                if(dataTypeKeyword == "enum")
                 {
-                    var firstEnumValue = dataTableProcessor.GetValue(4, i);
-                    if (!DataTableExtension.TryParseEnum(firstEnumValue, out Type enumType))
+                    var firstEnumValue = dataTableProcessor.GetValue(4 , i);
+                    if(!DataTableExtension.TryParseEnum(firstEnumValue , out Type enumType))
                     {
-                        Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1", firstEnumValue));
+                        Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1" , firstEnumValue));
                         continue;
                     }
 
                     stringBuilder
                     .AppendLine("        /// <summary>")
-                    .AppendFormat("        /// {0}", dataTableProcessor.GetComment(i)).AppendLine()
+                    .AppendFormat("        /// {0}" , dataTableProcessor.GetComment(i)).AppendLine( )
                     .AppendLine("        /// </summary>")
-                    .AppendFormat("        public {0} {1}", enumType.FullName.Replace('+', '.'), dataTableProcessor.GetName(i)).AppendLine()
+                    .AppendFormat("        public {0} {1}" , enumType.FullName.Replace('+' , '.') , dataTableProcessor.GetName(i)).AppendLine( )
                     .AppendLine("        {")
                     .AppendLine("            get;")
                     .AppendLine("            private set;")
@@ -117,9 +129,9 @@ namespace GameFramework.Editor.DataTableTools
                 {
                     stringBuilder
                     .AppendLine("        /// <summary>")
-                    .AppendFormat("        /// {0}", dataTableProcessor.GetComment(i)).AppendLine()
+                    .AppendFormat("        /// {0}" , dataTableProcessor.GetComment(i)).AppendLine( )
                     .AppendLine("        /// </summary>")
-                    .AppendFormat("        public {0} {1}", dataTypeKeyword, dataTableProcessor.GetName(i)).AppendLine()
+                    .AppendFormat("        public {0} {1}" , dataTypeKeyword , dataTableProcessor.GetName(i)).AppendLine( )
                     .AppendLine("        {")
                     .AppendLine("            get;")
                     .AppendLine("            private set;")
@@ -127,12 +139,12 @@ namespace GameFramework.Editor.DataTableTools
                 }
             }
 
-            return stringBuilder.ToString();
+            return stringBuilder.ToString( );
         }
 
         private static string GenerateDataTableParser(DataTableProcessor dataTableProcessor)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder( );
             stringBuilder
                 .AppendLine("        public override bool ParseDataRow(string dataRowString, object userData)")
                 .AppendLine("        {")
@@ -141,19 +153,19 @@ namespace GameFramework.Editor.DataTableTools
                 .AppendLine("            {")
                 .AppendLine("                columnStrings[i] = columnStrings[i].Trim(DataTableExtension.DataTrimSeparators);")
                 .AppendLine("            }")
-                .AppendLine()
+                .AppendLine( )
                 .AppendLine("            int index = 0;");
 
-            for (int i = 0; i < dataTableProcessor.RawColumnCount; i++)
+            for(int i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
-                if (dataTableProcessor.IsCommentColumn(i))
+                if(dataTableProcessor.IsCommentColumn(i))
                 {
                     // 注释列
                     stringBuilder.AppendLine("            index++;");
                     continue;
                 }
 
-                if (dataTableProcessor.IsIdColumn(i))
+                if(dataTableProcessor.IsIdColumn(i))
                 {
                     // 编号列
                     stringBuilder.AppendLine("            m_Id = int.Parse(columnStrings[index++]);");
@@ -164,66 +176,66 @@ namespace GameFramework.Editor.DataTableTools
 
                 int isArrayType = ParseArrayType(languageKeyword);
 
-                if (dataTableProcessor.IsSystem(i))
+                if(dataTableProcessor.IsSystem(i))
                 {
-                    if (isArrayType > 0)
+                    if(isArrayType > 0)
                     {
-                        if (isArrayType == 1)
+                        if(isArrayType == 1)
                         {
-                            stringBuilder.AppendFormat("            {0} = DataTableExtension.ParseArray<{1}>(columnStrings[index++]);", dataTableProcessor.GetName(i), languageKeyword.Replace("[]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = DataTableExtension.ParseArray<{1}>(columnStrings[index++]);" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[]" , string.Empty)).AppendLine( );
                         }
-                        else if (isArrayType == 2)
+                        else if(isArrayType == 2)
                         {
-                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse2DArray<{1}>(columnStrings[index++]);", dataTableProcessor.GetName(i), languageKeyword.Replace("[][]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse2DArray<{1}>(columnStrings[index++]);" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[][]" , string.Empty)).AppendLine( );
                         }
                     }
                     else
                     {
-                        if (languageKeyword == "string")
+                        if(languageKeyword == "string")
                         {
-                            stringBuilder.AppendFormat("            {0} = columnStrings[index++];", dataTableProcessor.GetName(i)).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = columnStrings[index++];" , dataTableProcessor.GetName(i)).AppendLine( );
                         }
-                        else if (languageKeyword == "enum")
+                        else if(languageKeyword == "enum")
                         {
-                            var firstEnumValue = dataTableProcessor.GetValue(4, i);
-                            if (!DataTableExtension.TryParseEnum(firstEnumValue, out Type enumType))
+                            var firstEnumValue = dataTableProcessor.GetValue(4 , i);
+                            if(!DataTableExtension.TryParseEnum(firstEnumValue , out Type enumType))
                             {
-                                Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1", firstEnumValue));
+                                Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1" , firstEnumValue));
                                 continue;
                             }
 
-                            stringBuilder.AppendFormat("            {0} = DataTableExtension.ParseEnum<{1}>(columnStrings[index++]);", dataTableProcessor.GetName(i), enumType.FullName.Replace('+', '.')).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = DataTableExtension.ParseEnum<{1}>(columnStrings[index++]);" , dataTableProcessor.GetName(i) , enumType.FullName.Replace('+' , '.')).AppendLine( );
                         }
                         else
                         {
-                            stringBuilder.AppendFormat("            {0} = {1}.Parse(columnStrings[index++]);", dataTableProcessor.GetName(i), languageKeyword).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = {1}.Parse(columnStrings[index++]);" , dataTableProcessor.GetName(i) , languageKeyword).AppendLine( );
                         }
                     }
                 }
                 else
                 {
-                    if (isArrayType > 0)
+                    if(isArrayType > 0)
                     {
-                        if (isArrayType == 1)
+                        if(isArrayType == 1)
                         {
-                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}Array(columnStrings[index++]);", dataTableProcessor.GetName(i), languageKeyword.Replace("[]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}Array(columnStrings[index++]);" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[]" , string.Empty)).AppendLine( );
                         }
-                        else if (isArrayType == 2)
+                        else if(isArrayType == 2)
                         {
-                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}2DArray(columnStrings[index++]);", dataTableProcessor.GetName(i), languageKeyword.Replace("[][]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}2DArray(columnStrings[index++]);" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[][]" , string.Empty)).AppendLine( );
                         }
                     }
                     else
                     {
-                        stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}(columnStrings[index++]);", dataTableProcessor.GetName(i), dataTableProcessor.GetType(i).Name).AppendLine();
+                        stringBuilder.AppendFormat("            {0} = DataTableExtension.Parse{1}(columnStrings[index++]);" , dataTableProcessor.GetName(i) , dataTableProcessor.GetType(i).Name).AppendLine( );
                     }
                 }
             }
 
-            stringBuilder.AppendLine()
+            stringBuilder.AppendLine( )
                 .AppendLine("            return true;")
                 .AppendLine("        }")
-                .AppendLine()
+                .AppendLine( )
                 .AppendLine("        public override bool ParseDataRow(byte[] dataRowBytes, int startIndex, int length, object userData)")
                 .AppendLine("        {")
                 .AppendLine("            using (MemoryStream memoryStream = new MemoryStream(dataRowBytes, startIndex, length, false))")
@@ -231,15 +243,15 @@ namespace GameFramework.Editor.DataTableTools
                 .AppendLine("                using (BinaryReader binaryReader = new BinaryReader(memoryStream, Encoding.UTF8))")
                 .AppendLine("                {");
 
-            for (int i = 0; i < dataTableProcessor.RawColumnCount; i++)
+            for(int i = 0; i < dataTableProcessor.RawColumnCount; i++)
             {
-                if (dataTableProcessor.IsCommentColumn(i))
+                if(dataTableProcessor.IsCommentColumn(i))
                 {
                     // 注释列
                     continue;
                 }
 
-                if (dataTableProcessor.IsIdColumn(i))
+                if(dataTableProcessor.IsIdColumn(i))
                 {
                     // 编号列
                     stringBuilder.AppendLine("                    m_Id = binaryReader.Read7BitEncodedInt32();");
@@ -249,57 +261,57 @@ namespace GameFramework.Editor.DataTableTools
                 string languageKeyword = dataTableProcessor.GetLanguageKeyword(i);
                 int isArrayType = ParseArrayType(languageKeyword);
 
-                if (dataTableProcessor.IsSystem(i))
+                if(dataTableProcessor.IsSystem(i))
                 {
-                    if (isArrayType > 0)
+                    if(isArrayType > 0)
                     {
-                        if (isArrayType == 1)
+                        if(isArrayType == 1)
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.ReadArray<{1}>();", dataTableProcessor.GetName(i), languageKeyword.Replace("[]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.ReadArray<{1}>();" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[]" , string.Empty)).AppendLine( );
                         }
-                        else if (isArrayType == 2)
+                        else if(isArrayType == 2)
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read2DArray<{1}>();", dataTableProcessor.GetName(i), languageKeyword.Replace("[][]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read2DArray<{1}>();" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[][]" , string.Empty)).AppendLine( );
                         }
                     }
                     else
                     {
-                        if (languageKeyword == "int" || languageKeyword == "uint" || languageKeyword == "long" || languageKeyword == "ulong")
+                        if(languageKeyword == "int" || languageKeyword == "uint" || languageKeyword == "long" || languageKeyword == "ulong")
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read7BitEncoded{1}();", dataTableProcessor.GetName(i), dataTableProcessor.GetType(i).Name).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read7BitEncoded{1}();" , dataTableProcessor.GetName(i) , dataTableProcessor.GetType(i).Name).AppendLine( );
                         }
-                        else if (languageKeyword == "enum")
+                        else if(languageKeyword == "enum")
                         {
-                            var firstEnumValue = dataTableProcessor.GetValue(4, i);
-                            if (!DataTableExtension.TryParseEnum(firstEnumValue, out Type enumType))
+                            var firstEnumValue = dataTableProcessor.GetValue(4 , i);
+                            if(!DataTableExtension.TryParseEnum(firstEnumValue , out Type enumType))
                             {
-                                Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1", firstEnumValue));
+                                Debug.LogError(Utility.Text.Format("解析枚举类型失败:{0}, 配置枚举格式为: EnumType.Item1" , firstEnumValue));
                                 continue;
                             }
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.ReadEnum<{1}>();", dataTableProcessor.GetName(i), enumType.FullName.Replace('+', '.')).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.ReadEnum<{1}>();" , dataTableProcessor.GetName(i) , enumType.FullName.Replace('+' , '.')).AppendLine( );
                         }
                         else
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}();", dataTableProcessor.GetName(i), dataTableProcessor.GetType(i).Name).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}();" , dataTableProcessor.GetName(i) , dataTableProcessor.GetType(i).Name).AppendLine( );
                         }
                     }
                 }
                 else
                 {
-                    if (isArrayType > 0)
+                    if(isArrayType > 0)
                     {
-                        if (isArrayType == 1)
+                        if(isArrayType == 1)
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}Array();", dataTableProcessor.GetName(i), languageKeyword.Replace("[]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}Array();" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[]" , string.Empty)).AppendLine( );
                         }
-                        else if (isArrayType == 2)
+                        else if(isArrayType == 2)
                         {
-                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}2DArray();", dataTableProcessor.GetName(i), languageKeyword.Replace("[][]", string.Empty)).AppendLine();
+                            stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}2DArray();" , dataTableProcessor.GetName(i) , languageKeyword.Replace("[][]" , string.Empty)).AppendLine( );
                         }
                     }
                     else
                     {
-                        stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}();", dataTableProcessor.GetName(i), dataTableProcessor.GetType(i).Name).AppendLine();
+                        stringBuilder.AppendFormat("                    {0} = binaryReader.Read{1}();" , dataTableProcessor.GetName(i) , dataTableProcessor.GetType(i).Name).AppendLine( );
                     }
                 }
             }
@@ -307,11 +319,11 @@ namespace GameFramework.Editor.DataTableTools
             stringBuilder
                 .AppendLine("                }")
                 .AppendLine("            }")
-                .AppendLine()
+                .AppendLine( )
                 .AppendLine("            return true;")
                 .Append("        }");
 
-            return stringBuilder.ToString();
+            return stringBuilder.ToString( );
         }
         /// <summary>
         /// 0:非数组; 1:一维数组; 2:二维数组
@@ -320,17 +332,17 @@ namespace GameFramework.Editor.DataTableTools
         /// <returns></returns>
         private static int ParseArrayType(string languageKeyword)
         {
-            if (languageKeyword.EndsWith("[][]"))
+            if(languageKeyword.EndsWith("[][]"))
             {
                 return 2;
             }
-            if (languageKeyword.EndsWith("[]"))
+            if(languageKeyword.EndsWith("[]"))
             {
                 return 1;
             }
 
             return 0;
         }
-        
+
     }
 }

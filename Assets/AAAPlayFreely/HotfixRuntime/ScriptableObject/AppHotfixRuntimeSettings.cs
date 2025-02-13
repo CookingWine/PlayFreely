@@ -14,9 +14,27 @@ namespace PlayFreely.HotfixRuntime
         /// </summary>
         private static AppHotfixRuntimeSettings m_Instance;
 
+        [Header("数据表")]
+        [SerializeField] string[] mDataTables;
+        public string[] DataTables => mDataTables;
+
+
+        [Header("配置表")]
+        [SerializeField] string[] mConfigs;
+        public string[] Configs => mConfigs;
+
+        [Header("多语言表")]
+        [SerializeField] string[] mLanguages;
+        public string[] Languages => mLanguages;
+
+        [Header("已启用流程列表")]
+        [SerializeField] string[] mProcedures;
+
+        public string[] Procedures => mProcedures;
+
 #if UNITY_EDITOR
         /// <summary>
-        /// 获取app热更配置的实例
+        /// 获取app热更配置的实例【编辑器下使用】
         /// </summary>
         /// <returns></returns>
         public static AppHotfixRuntimeSettings GetAppInstance( )

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 namespace PlayFreely.EditorTools
 {
     /// <summary>
@@ -113,7 +114,7 @@ namespace PlayFreely.EditorTools
             languageWatcher.Renamed -= languageFileRenameEvent;
             languageWatcher.Renamed += languageFileRenameEvent;
 
-
+            m_HotfixAppConfige = AppHotfixRuntimeSettings.GetAppInstance( );
 
             m_IsInitialization = true;
         }
@@ -134,9 +135,57 @@ namespace PlayFreely.EditorTools
             {
                 return;
             }
+            if(s_DataTableFileChangeList.Count > 0)
+            {
+                IList<string> changedFiles = GetMainExcelFiles(PlayFreelyGameDataType.DataTable , m_HotfixAppConfige.DataTables , s_DataTableFileChangeList);
+                GameDataGenerator.RefreshAllDataTable(changedFiles);
+                foreach(var item in changedFiles)
+                {
+                    Debug.Log($"自动刷新DataTable:{item}");
+                }
+
+                s_DataTableFileChangeList.Clear( );
+            }
+            if(s_ConfigFileChangeList.Count > 0)
+            {
+
+                s_ConfigFileChangeList.Clear( );
+            }
+            if(s_LanguageFileChangeList.Count > 0)
+            {
+
+                s_LanguageFileChangeList.Clear( );
+            }
 
         }
 
+        /// <summary>
+        ///  根据改变的Excel列表获取所有对应的主文件列表
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="relativeMainFiles"></param>
+        /// <param name="changedFiles"></param>
+        /// <returns></returns>
+        private static IList<string> GetMainExcelFiles(PlayFreelyGameDataType dt , IList<string> relativeMainFiles , IList<string> changedFiles)
+        {
+            IList<string> result = new List<string>( );
+            foreach(var changedFile in changedFiles)
+            {
+                var relativePathNoExt = GameDataGenerator.GetGameDataExcelRelativePath(dt , changedFile);
+                foreach(var mainName in relativeMainFiles)
+                {
+                    if(relativePathNoExt.CompareTo(mainName) == 0 || relativePathNoExt.StartsWith(mainName))
+                    {
+                        var mainExcelFullPath = GameDataGenerator.GameDataExcelRelative2FullPath(dt , mainName);
+                        if(!result.Contains(mainExcelFullPath))
+                        {
+                            result.Add(mainExcelFullPath);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
 
         /// <summary>
         /// 数据配置文件改变时回调

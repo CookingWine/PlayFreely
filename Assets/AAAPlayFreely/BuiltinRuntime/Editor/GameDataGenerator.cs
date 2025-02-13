@@ -26,13 +26,66 @@ namespace PlayFreely.EditorTools
         /// </summary>
         public static void GenerateDataTable( )
         {
+            //刷新所有数据表
+            RefreshAllDataTable( );
+            //刷新所有配置
+            RefreshAllConfig( );
+            //刷新本地化语言数据
+            RefreshAllLanguage( );
 
+
+            AssetDatabase.Refresh( );
+        }
+
+        /// <summary>
+        /// 刷新所有数据表
+        /// </summary>
+        public static void RefreshAllDataTable(IList<string> files = null)
+        {
+
+        }
+
+        /// <summary>
+        /// 刷新配置
+        /// </summary>
+        public static void RefreshAllConfig(IList<string> files = null)
+        {
+
+        }
+
+        /// <summary>
+        /// 刷新本地化语言
+        /// </summary>
+        public static void RefreshAllLanguage(IList<string> files = null)
+        {
+
+        }
+
+
+        /// <summary>
+        /// 返回Excel的相对目录(无扩展名)
+        /// </summary>
+        /// <param name="tp"></param>
+        /// <param name="excelFile"></param>
+        /// <returns></returns>
+        public static string GetGameDataExcelRelativePath(PlayFreelyGameDataType tp , string excelFile)
+        {
+            var excelRelativePath = Path.GetRelativePath(GetGameDataExcelDir(tp) , excelFile);
+            // 获取表的相对路径并去掉扩展名
+            excelRelativePath = UtilityBuiltin.AssetsPath.GetCombinePath(Path.GetDirectoryName(excelRelativePath) , Path.GetFileNameWithoutExtension(excelRelativePath));
+            return excelRelativePath;
         }
 
         public static string GameDataExcelRelative2FullPath(PlayFreelyGameDataType tp , string relativeExcelPath)
         {
             var excelDir = GetGameDataExcelDir(tp);
             return UtilityBuiltin.AssetsPath.GetCombinePath(excelDir , relativeExcelPath + ".xlsx");
+        }
+
+        internal static string GetGameDataRelativeName(string fileName , string relativePath)
+        {
+            var path = Path.GetRelativePath(relativePath , fileName);
+            return UtilityBuiltin.AssetsPath.GetCombinePath(Path.GetDirectoryName(path) , Path.GetFileNameWithoutExtension(path));
         }
 
         /// <summary>
@@ -97,8 +150,6 @@ namespace PlayFreely.EditorTools
                     }
                 }
             }
-
-
             return result;
         }
 

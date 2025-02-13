@@ -16,7 +16,7 @@ namespace PlayFreely.EditorTools
         #region 宏定义
 
         /// <summary>
-        /// 禁用禁用热更模式
+        /// 禁用热更模式
         /// </summary>
         public const string DISABLE_HYBRIDCLR = "DISABLE_HYBRIDCLR";
 
@@ -57,8 +57,23 @@ namespace PlayFreely.EditorTools
         #endregion
 
         #region 文件路径
-
         //----------------------------------------------↓↓↓↓↓Assets内↓↓↓↓----------------------------------------------------------------------------------------//
+
+        /// <summary>
+        /// 数据表代码生成的模板文件路径
+        /// </summary>
+        public const string DataTableCodeTemplate = "Assets/AAAPlayFreely/Editor/DataTableGenerator/DataTableCodeTemplate/DataTableCodeTemplate.txt";
+
+        /// <summary>
+        /// 数据表文件路径
+        /// </summary>
+        public const string DataTablePath = "Assets/AAAPlayFreely/HotfixRuntimeAsset/DataTable";
+
+        /// <summary>
+        /// 数据表代码生成的路径
+        /// </summary>
+        public const string DataTableCodePath = "Assets/AAAPlayFreely/HotfixRuntime/DataTable";
+
         /// <summary>
         /// 编辑器场景文件路径
         /// </summary>
